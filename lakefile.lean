@@ -6,4 +6,5 @@ package "LeanBook" where
 
 @[default_target]
 lean_lib «LeanBook» where
+  globs := #[.submodules `LeanBook]
   -- add library configuration options here
