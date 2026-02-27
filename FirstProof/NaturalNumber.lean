@@ -31,3 +31,7 @@ example : MyNat.add .one .one = .two := by
   rfl -- ゴールを表示するには rfl の **先頭** にカーソルを置く
 -- example : 命題に名前を付けずに証明する
 -- rfl : タクティク と呼ばれるものの1つ
+
+/-- ゼロを右から足しても値は変わらない -/
+example (n : MyNat) : MyNat.add n .zero = n := by
+  rfl
