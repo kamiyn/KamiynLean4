@@ -78,3 +78,30 @@ example (P : Prop) : ¬ ¬ (P ∨ ¬ P) := by
     left
     exact hp
   exact False.elim (h this)
+
+-- exact? タクティク で ライブラリ を検索する
+example (P : Prop) : (P → True) ↔ True := by
+  exact? -- Try this: exact imp_true_iff P
+
+example (P : Prop) : (True → P) ↔ P := by
+  exact? -- Try this: exact true_imp_iff
+
+-- show .. from 構文で一時的な補題を示す
+example (P Q : Prop) (h : ¬ P ↔ Q) : (P → False) ↔ Q := by
+  rw [show (P → False) ↔ ¬ P from by rfl]
+  rw [h]
+
+-- 練習問題
+example (P : Prop) : ¬ (P ↔ ¬ P) := by
+  intro h -- (P ↔ ¬ P) を仮定する
+  have hNotPP : ¬ P → P := by
+    intro hnp -- ¬ P を仮定し P をGoalとする
+    rw[h] -- ¬ P を　Goal に置換
+    exact hnp
+  have hPnotP : P → ¬ P := by
+    intro hp -- P を仮定し ¬ P をGoalとする
+    rw[← h]
+    exact hp
+  -- ここで ¬ P を示す
+  suffices hyp : ¬ P from by
+    apply hPnotP
