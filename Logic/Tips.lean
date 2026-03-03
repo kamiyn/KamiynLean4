@@ -92,16 +92,42 @@ example (P Q : Prop) (h : ¬ P ↔ Q) : (P → False) ↔ Q := by
   rw [h]
 
 -- 練習問題
+-- 最初に記述した時の解答
 example (P : Prop) : ¬ (P ↔ ¬ P) := by
   intro h -- (P ↔ ¬ P) を仮定する
-  have hNotPP : ¬ P → P := by
-    intro hnp -- ¬ P を仮定し P をGoalとする
+
+  have hypPpositive : P := by
     rw[h] -- ¬ P を　Goal に置換
-    exact hnp
-  have hPnotP : P → ¬ P := by
-    intro hp -- P を仮定し ¬ P をGoalとする
+    intro hp -- P を仮定
+    suffices hyp : ¬ P from by
+      contradiction
     rw[← h]
     exact hp
-  -- ここで ¬ P を示す
-  suffices hyp : ¬ P from by
-    apply hPnotP
+
+  have hypPnegative : ¬ P := by
+    intro hp -- P を仮定
+    suffices hyp : ¬ P from by
+      contradiction
+    rw[← h]
+    exact hp
+
+  contradiction
+
+-- Gemini による書き換え案を参照しつつ短縮化を試みる
+-- Lean本ではこの時点で rw[h] at hp を解説していないが Gemini が提案してきた
+-- …の後 解答ページを見たらほぼ同一の解答に到達しており at を使っていた
+-- さらに検討した結果 at を除去してシンプルになった
+example (P : Prop) : ¬ (P ↔ ¬ P) := by
+  intro h -- (P ↔ ¬ P) を仮定する
+  have hypNotP : ¬ P := by
+    intro hp
+    have hnp : ¬ P := by
+      rw [← h]
+      exact hp
+    exact hnp hp
+  -- 初回の解答では2つの独立した補題(ほぼ同型)を作ったが ここでは依存した補題を作ることでコード量を減らす
+  have hypP : P := by
+    rw[h]
+    exact hypNotP
+
+  exact False.elim (hypNotP hypP)
