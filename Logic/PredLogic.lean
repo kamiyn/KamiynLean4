@@ -83,5 +83,20 @@ example : PhilanExists → EveryoneLoved := by
   -- Goalの lover = philan とする
   exists philan
   -- この時点で Goal が philan -♥→ humanAssumed になる
-  -- hypPhilan : ∀ human : Human, philan -♥→ human なので human を渡して証明完了
+  -- hypPhilan : ∀ human : Human, philan -♥→ human なので humanAssumed を渡して証明完了
   exact hypPhilan humanAssumed
+
+-- 練習問題
+example : IdolExists → EveryoneLovesSomeone := by
+  -- アイドルの存在を仮定する
+  intro hIdol
+  obtain ⟨idol, hypIdol⟩ := hIdol
+  dsimp[EveryoneLovesSomeone]
+  -- ∀ h : Human, ∃ tgt : Human, h -♥→ tgt が Goal
+  intro humanAssumed
+  -- Goal は ∃ tgt : Human, humanAssumed -♥→ tgt
+  exists idol
+  -- この時点で Goal が humanAssumed -♥→ idol になる
+  -- hypIdol が ∀ h : Human, h -♥→ idol なので humanAssumed を渡して証明完了
+  exact hypIdol humanAssumed
+-- 本の解答は dsimp を先に行うことで intro 行を1行に短縮している
