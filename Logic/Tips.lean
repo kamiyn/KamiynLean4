@@ -62,7 +62,7 @@ example (P : Prop) : ¬ ¬ (P ∨ ¬ P) := by
     left -- P ∨ ¬ P という have 論理和ゴールの左側を証明する
     exact hp
 
-  -- tthis は 直前の have により構築された (P ∨ ¬ P)
+  -- this は 直前の have により構築された (P ∨ ¬ P)
   -- 仮定 h ¬ (P ∨ ¬ P) と矛盾する
   exact False.elim (h this) -- contradiction
 
