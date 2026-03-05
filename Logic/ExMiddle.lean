@@ -61,3 +61,23 @@ example (P Q : Prop) : ¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q := by
       exact absurd hPandQ.left hNotP -- Not は後ろに置かないといけない
     case inr hNotQ =>
       exact absurd hPandQ.right hNotQ
+
+example (P Q : Prop) : ¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q := by
+  constructor
+  · intro hNotPandQ
+    by_cases hP : P
+    · right-- ゴールを ¬ Q に変更
+      intro hQ-- hQ : Q, ゴールは False になる
+      -- hNotPandQ という関数に、hP と hQ から構成した P ∧ Q の証明を適用し、False を導出する
+      -- P ∧ Q は 型レベルであり
+      -- ⟨hP, hQ⟩ は項レベル （それぞれ $P$ 型、$Q$ 型を持つ具体的な証明オブジェクト）で実体の構築にあたる
+      exact hNotPandQ ⟨hP, hQ⟩
+    · left
+      exact hP
+  · intro hNotPorNotQ
+    intro hPandQ
+    cases hNotPorNotQ
+    case inl hNotP =>
+      exact absurd hPandQ.left hNotP
+    case inr hNotQ =>
+      exact absurd hPandQ.right hNotQ
