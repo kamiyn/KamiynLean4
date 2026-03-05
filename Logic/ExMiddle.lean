@@ -81,3 +81,18 @@ example (P Q : Prop) : ¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q := by
       exact absurd hPandQ.left hNotP
     case inr hNotQ =>
       exact absurd hPandQ.right hNotQ
+
+/-- 待遇が元の命題と同値であること -/
+example (P Q : Prop) : (P → Q) ↔ (¬ Q → ¬ P) := by
+  constructor
+  -- mp (P → Q) → (¬ Q → ¬ P)
+  · intro hPQ
+    intro hNotQ
+    intro hP
+    exact absurd (hPQ hP) hNotQ
+  -- mpr (¬ Q → ¬ P) → (P → Q)
+  · intro hNotQNotP
+    intro hP
+    by_cases hQ : Q
+    · exact hQ
+    · exact absurd hP (hNotQNotP hQ)
