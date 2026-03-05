@@ -36,26 +36,21 @@ example (P Q : Prop) : ¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q := by
   -- case mp ¬ (P ∧ Q) → ¬ P ∨ ¬ Q
   -- Goal が ∨ なら left か right を証明する
   -- 仮定は (P ∧ Q) → False と同値
-  · intro h -- ¬ (P ∧ Q) を仮定する
-    have hypPQ : P → ¬ Q := by
+  · intro hNotPandQ -- ¬ (P ∧ Q) を仮定する
+    have hypPNotQ : P → ¬ Q := by
       intro hP
       intro hQ
       have hPandQ : P ∧ Q := by
         constructor
         · exact hP
         · exact hQ
-      exact False.elim (h hPandQ)
-
-    have hypQP : Q → ¬ P := by
-      intro hQ
-      intro hP
-      have hPandQ : P ∧ Q := by
-        constructor
-        · exact hP
-        · exact hQ
-      exact False.elim (h hPandQ)
-
-
+      exact False.elim (hNotPandQ hPandQ)
+    -- ここでPに対する排中律を使う
+    by_cases hP : P
+    · right -- ¬ P ∨ ¬ Q の right である ¬ Q を取り出し
+      exact hypPNotQ hP -- P → ¬ Q
+    · left -- ¬ P ∨ ¬ Q の left である ¬ P を取り出し
+      exact hP
 
   -- case mpr ¬ P ∨ ¬ Q → ¬ (P ∧ Q)
   · intro hNotPorNotQ -- ¬ P ∨ ¬ Q を仮定する
