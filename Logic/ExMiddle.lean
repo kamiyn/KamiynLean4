@@ -96,3 +96,24 @@ example (P Q : Prop) : (P → Q) ↔ (¬ Q → ¬ P) := by
     by_cases hQ : Q
     · exact hQ
     · exact absurd hP (hNotQNotP hQ)
+
+-- https://github.com/LambdaNote/errata-leanbook-1-1/issues/48
+-- 差し替え予定の練習問題
+/-- 含意は「または」と否定で表せる -/
+example (P Q : Prop) : (P → Q) ↔ (¬ P ∨ Q) := by
+  constructor
+  -- (P → Q) → (¬ P ∨ Q)
+  · intro hPQ -- P → Q を導入
+    by_cases hP : P
+    · right -- ¬ P ∨ Q の right をGoalとする
+      exact hPQ hP
+    · left -- ¬ P ∨ Q の left をGoalとする
+      exact hP
+  -- (¬ P ∨ Q) → (P → Q)
+  · intro hNotPorQ
+    intro hP
+    cases hNotPorQ
+    case inl hNotP =>
+      exact absurd hP hNotP
+    case inr hQ =>
+      exact hQ
