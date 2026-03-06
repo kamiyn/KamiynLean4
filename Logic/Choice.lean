@@ -51,9 +51,14 @@ noncomputable def inverse (f : X → Y) (hf : Surjective f) : Y → X := by
   exact x.val
 
 /-- 対偶が元の命題と同値であることを認めれば、二重否定の除去が導ける -/
+-- この練習で **排中律を使ってはいけません**
 theorem double_negation_or_contra_equiv (P : Prop)
-  (contra_equiv : ∀ (P Q : Prop), (¬ P → ¬ Q) ↔ (Q →  P)) : ¬ ¬ P → P := by
-  sorry
+  (contra_equiv : ∀ (P Q : Prop), (¬ P → ¬ Q) ↔ (Q → P)) : ¬ ¬ P → P := by
+  rw[← contra_equiv]
+  -- ¬P → ¬¬¬P に変換
+  intro hnp
+  intro hnnp
+  exact False.elim (hnnp hnp) -- ¬ は P → False と定義上等しいので Not側を先に書いて適用する必要がある
 
 -- Classical.choice に依存していないことを確認してください
 #print axioms double_negation_or_contra_equiv
