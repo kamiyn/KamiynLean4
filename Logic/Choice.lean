@@ -62,3 +62,22 @@ theorem double_negation_or_contra_equiv (P : Prop)
 
 -- Classical.choice に依存していないことを確認してください
 #print axioms double_negation_or_contra_equiv
+
+-- rw[h] を使わないよう Gemini の支援を得て書き換え
+theorem double_negation_or_contra_equiv_norw (P : Prop)
+  (contra_equiv : ∀ (P' Q' : Prop), (¬ P' → ¬ Q') ↔ (Q' → P')) : ¬ ¬ P → P := by
+  -- ゴール ¬ ¬ P → P は、(Q' → P') の形をしている。
+  -- ここで P' = P, Q' = ¬ ¬ P と置くと、contra_equiv は以下のようになる：
+  -- (¬ P → ¬ ¬ ¬ P) ↔ (¬ ¬ P → P)
+  -- これを算出するのが contra_equiv P (¬ ¬ P)
+
+  -- (¬ P → ¬ ¬ ¬ P) → (¬ ¬ P → P) を適用し
+  -- 左側の命題 (¬ P → ¬ ¬ ¬ P) の証明へと帰着させる。
+  apply (contra_equiv P (¬ ¬ P)).mp
+
+  -- 現在のゴール: ¬ P → ¬ ¬ ¬ P
+  intro hnp    -- ¬ P
+  intro hnnp  -- ¬ ¬ ¬ P (これは ¬ ¬ P → False と同値)
+  -- ¬ ¬ P を作れば False が導ける
+  -- hnnp は (¬ P → False) → False のような構造
+  exact hnnp hnp
