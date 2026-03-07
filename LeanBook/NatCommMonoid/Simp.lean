@@ -71,5 +71,15 @@ example (n : MyNat) : 1 + n = n + 1 := calc
   _ = n + 1 := by rfl
 
 -- 練習問題
+example (n : MyNat) : 2 + n = n + 2 := calc
+  _ = .succ 1 + n := by rfl -- 1 + n を定義に沿って展開
+  _ = .succ (1 + n) := by rw [MyNat.succ_add]
+  _ = .succ (.succ 0 + n) := rfl
+  _ = .succ (.succ (0 + n)) := by rw [MyNat.succ_add]
+  _ = .succ (.succ n) := by rw [MyNat.zero_add]
+
+-- 上は calc による進行を再帰的に展開したものだった
 example (n : MyNat) : 2 + n = n + 2 := by
-  sorry
+  induction n
+  case zero => rfl
+  case succ n' ih => simp [ih]
