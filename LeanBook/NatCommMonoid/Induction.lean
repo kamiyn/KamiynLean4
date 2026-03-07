@@ -69,3 +69,17 @@ example (n : MyNat) : 1 + n = MyNat.succ n := by
   case succ n' ih =>
     rw[MyNat.add_succ]
     rw[ih]
+
+-- 等式の等価性（Congruence） を利用
+-- a = b から f(a) = f(b) をを導出
+-- Lean（および純粋関数型言語）において、すべての関数は数学的な意味での関数、すなわち「同じ入力に対しては常に同じ出力を返す」決定的な存在
+-- congrArg の利用は 非依存型なら型エラーの余地がない とのこと
+example (n : MyNat) : 0 + n = n := by
+  induction n
+  case zero =>
+    rfl
+  case succ n' ih =>
+    -- ゴール ⊢ 0 + MyNat.succ n' = MyNat.succ n' は、
+    -- 定義により ⊢ MyNat.succ (0 + n') = MyNat.succ n' と定義的に等しい。
+    -- ここで、ih : 0 + n' = n' の両辺に MyNat.succ を適用する。
+    exact congrArg MyNat.succ ih
