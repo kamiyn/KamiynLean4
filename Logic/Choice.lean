@@ -96,3 +96,8 @@ theorem double_negation_or_contra_equiv_obtain (P : Prop)
   intro hnnp   -- ¬¬P
   -- hnnp : (P → False) → False, hnp : P → False なので、hnnp hnp は False
   exact hnnp hnp
+
+-- Geminiは このようにも書けると出してきたが カリー・ハワード同型対応 は次の話題
+theorem double_negation_or_contra_equiv_term (P : Prop)
+  (contra_equiv : ∀ (P' Q' : Prop), (¬ P' → ¬ Q') ↔ (Q' → P')) : ¬ ¬ P → P :=
+  (contra_equiv P (¬ ¬ P)).mp (fun (hnp : ¬ P) (hnnp : ¬ ¬ P) => hnnp hnp)
