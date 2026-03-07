@@ -31,7 +31,8 @@ theorem MyNat.add_succ (m n : MyNat) : m + MyNat.succ n = MyNat.succ (m + n) := 
 
 set_option pp.fieldNotation.generalized false in
 
-example (n : MyNat) : 0 + n = n := by
+/-- 0 を左から足しても変わらない -/
+theorem MyNat.zero_add (n : MyNat) : 0 + n = n := by
   -- n についての帰納法で証明する
   induction n with
   -- MyNat のコンストラクタが zero と succ (n : MyNat) なので、それらでパターン分けする
