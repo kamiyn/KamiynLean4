@@ -81,3 +81,18 @@ theorem double_negation_or_contra_equiv_norw (P : Prop)
   -- ¬ ¬ P を作れば False が導ける
   -- hnnp は (¬ P → False) → False のような構造
   exact hnnp hnp
+
+-- obtain を使って書く
+theorem double_negation_or_contra_equiv_obtain (P : Prop)
+  (contra_equiv : ∀ (P' Q' : Prop), (¬ P' → ¬ Q') ↔ (Q' → P')) : ¬ ¬ P → P := by
+  -- 1. ∀ に具体的な命題 P と ¬¬P を適用し、得られた ↔ を分解する
+  obtain ⟨h_forward, h_backward⟩ := contra_equiv P (¬ ¬ P)
+
+  -- 2. ゴール ¬¬P → P を達成するために、(¬P → ¬¬¬P) → (¬¬P → P) の向き (h_forward) を使う
+  apply h_forward
+
+  -- 3. 新しいゴール: ¬P → ¬¬¬P
+  intro hnp    -- ¬P
+  intro hnnp   -- ¬¬P
+  -- hnnp : (P → False) → False, hnp : P → False なので、hnnp hnp は False
+  exact hnnp hnp
