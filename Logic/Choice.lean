@@ -85,17 +85,26 @@ theorem double_negation_or_contra_equiv_norw (P : Prop)
 -- obtain を使って書く
 theorem double_negation_or_contra_equiv_obtain (P : Prop)
   (contra_equiv : ∀ (P' Q' : Prop), (¬ P' → ¬ Q') ↔ (Q' → P')) : ¬ ¬ P → P := by
-  -- 1. ∀ に具体的な命題 P と ¬¬P を適用し、得られた ↔ を分解する
-  obtain ⟨h_forward, h_backward⟩ := contra_equiv P (¬ ¬ P)
-
-  -- 2. ゴール ¬¬P → P を達成するために、(¬P → ¬¬¬P) → (¬¬P → P) の向き (h_forward) を使う
+  -- P' = P, Q' = ¬ ¬ P と置くと、contra_equiv は以下のように特殊化できる：
+  -- (¬ P → ¬ ¬ ¬ P) ↔ (¬ ¬ P → P)
+  -- 1. 全称化された関数 contra_equiv に P と ¬¬P を適用し、
+  --    得られた Iff 構造体を分解して順方向の含意を取り出す
+  obtain ⟨h_forward, _⟩ := contra_equiv P (¬ ¬ P)
+  -- 2. 結論 (Q' → P') をゴール (¬ ¬ P → P) に一致させ、証明すべき内容を前件 (¬P → ¬Q') へと帰着させる逆向きの推論
+  --    ここで h_forward は (¬P → ¬¬¬P) → (¬¬P → P)
   apply h_forward
-
-  -- 3. 新しいゴール: ¬P → ¬¬¬P
-  intro hnp    -- ¬P
-  intro hnnp   -- ¬¬P
-  -- hnnp : (P → False) → False, hnp : P → False なので、hnnp hnp は False
+  -- 3. 新しいゴール (¬ P → ¬ ¬ ¬ P) の証明
+  --    ゴール ¬P → ¬¬¬P に対して、前提として hnp と hnnp を導入する
+  --    このとき、ゴールは False となる（否定の定義 Not P := P → False による）
+  intro hnp hnnp
+  -- 4. hnnp : (¬ ¬ P) に hnp : (¬ P) を適用して、直接 False を導く
+  --    より厳密には 高階関数 hnnp : (P → False) → False に対して、引数 hnp : P → False を適用
   exact hnnp hnp
+  -- Note: False.elim（$\text{ex falso quodlibet}$）は、「矛盾から任意の命題を導く」ために使われますが、ゴールそのものが False である場合は、単に exact hnnp hnp と記述するのが、最も直接的でノイズの少ない証明
+
+-- 'double_negation_or_contra_equiv_obtain' does not depend on any axioms
+-- obtain を使った記述は公理依存ゼロ
+#print axioms double_negation_or_contra_equiv_obtain
 
 -- Geminiは このようにも書けると出してきたが カリー・ハワード同型対応 は次の話題
 theorem double_negation_or_contra_equiv_term (P : Prop)
