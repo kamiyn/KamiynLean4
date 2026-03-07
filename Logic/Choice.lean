@@ -110,3 +110,20 @@ theorem double_negation_or_contra_equiv_obtain (P : Prop)
 theorem double_negation_or_contra_equiv_term (P : Prop)
   (contra_equiv : ∀ (P' Q' : Prop), (¬ P' → ¬ Q') ↔ (Q' → P')) : ¬ ¬ P → P :=
   (contra_equiv P (¬ ¬ P)).mp (fun (hnp : ¬ P) (hnnp : ¬ ¬ P) => hnnp hnp)
+
+-- https://github.com/LambdaNote/errata-leanbook-1-1/issues/52
+-- 差し替え予定の練習問題
+/-- 「二重否定の除去」の二重否定 ただし 排中律を使ってはいけません -/
+theorem double_negation_elim' (P : Prop) : ¬¬ (¬¬ P → P) := by
+  intro h1 -- ¬ (¬¬ P → P)
+  apply h1
+  intro h2 -- ¬¬ P
+  exfalso -- ここで Goal を矛盾に変更する
+  apply h2 -- Goal は ¬ P
+  intro hp -- ここで P が仮定された!
+  apply h1 -- 再度 ¬¬ P → P が Goalになる
+  intro _
+  exact hp
+
+-- Classical.choiceに依存していないことを確認してください
+#print axioms double_negation_elim'
