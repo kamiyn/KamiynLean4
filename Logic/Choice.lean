@@ -89,6 +89,8 @@ theorem double_negation_or_contra_equiv_obtain (P : Prop)
   -- (¬ P → ¬ ¬ ¬ P) ↔ (¬ ¬ P → P)
   -- 1. 全称化された関数 contra_equiv に P と ¬¬P を適用し、
   --    得られた Iff 構造体を分解して順方向の含意を取り出す
+  -- Note: ∀ に対して obtain を使うのは、正確には「∀ の結果が ∧ や ↔ などの構造を返す場合」に限られます。
+  --    ∃ に対する obtain とは 操作の性質 が根本的に異なり 練習問題時点では解説されていない
   obtain ⟨h_forward, _⟩ := contra_equiv P (¬ ¬ P)
   -- 2. 結論 (Q' → P') をゴール (¬ ¬ P → P) に一致させ、証明すべき内容を前件 (¬P → ¬Q') へと帰着させる逆向きの推論
   --    ここで h_forward は (¬P → ¬¬¬P) → (¬¬P → P)
@@ -105,6 +107,7 @@ theorem double_negation_or_contra_equiv_obtain (P : Prop)
 -- 'double_negation_or_contra_equiv_obtain' does not depend on any axioms
 -- obtain を使った記述は公理依存ゼロ
 #print axioms double_negation_or_contra_equiv_obtain
+
 
 -- Geminiは このようにも書けると出してきたが カリー・ハワード同型対応 は次の話題
 theorem double_negation_or_contra_equiv_term (P : Prop)
