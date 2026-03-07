@@ -62,5 +62,10 @@ example (n : MyNat) : 0 + n = n := by
     rw[ih]
 
 -- 練習問題
-example (n : MyNat) : 1 + n = .succ n := by
-  sorry
+example (n : MyNat) : 1 + n = MyNat.succ n := by
+  induction n
+  case zero =>
+    rfl -- 1 + MyNat.zero
+  case succ n' ih =>
+    rw[MyNat.add_succ]
+    rw[ih]
