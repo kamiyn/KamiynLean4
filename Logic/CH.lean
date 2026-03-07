@@ -34,8 +34,10 @@ example (P Q : Prop) (h : P → Q) (hp : P) : Q := by
 def idOnNat : Nat → Nat := by?
   intro n
   exact n
+-- idOnNat は fun n => n という恒等関数であることを by? で IDE 上で示す
 
 #eval idOnNat 42
 
-example (P Q : Prop) (hp : P) : Q → P :=
-  sorry
+-- タクティクを使わずに具体的に証明項を構成することで証明する
+example (P Q : Prop) (hp : P) : Q → P := by
+  exact fun _hq => hp
