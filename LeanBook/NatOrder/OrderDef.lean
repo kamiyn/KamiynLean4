@@ -99,10 +99,7 @@ theorem MyNat.le_add_right (n m : MyNat) : n ≤ n + m := by
 /-- 和の等式から a ≤ b を導く -/
 theorem MyNat.le.intro (h : n + k = m) : n ≤ m := by
   rw [← h]
-  induction k with
-  | zero => rfl
-  | succ k ih =>
-    apply MyNat.le_add_right
+  apply MyNat.le_add_right
 
 theorem MyNat.le_iff_add : n ≤ m ↔ ∃ k, n + k = m := by
   constructor
