@@ -117,7 +117,16 @@ instance : Std.Commutative (α := MyNat) (· * ·) where
 
 -- 練習問題
 example (m n : MyNat) : m * n * n * m = m * m * n * n := by
-  sorry
+  ac_rfl
 
 example (m n : MyNat) : (m + n) * (m + n) = m * m + 2 * m * n + n * n := by
-  sorry
+  calc
+  _ = (m + n) * (m + n) := by rfl
+  _ = (m + n) * m + (m + n) * n := by simp[MyNat.mul_add]
+  _ = (m * m + n * m) + (m * n + n * n) := by simp[MyNat.add_mul]
+  _ = m * m + (m * n + m * n) + n * n := by ac_rfl
+  _ = m * m + (1 * (m * n) + (m * n)) + n * n := by rw[MyNat.one_mul]
+  _ = m * m + ((1 + 1) * (m * n)) + n * n := by rw[MyNat.add_one_mul]
+  -- 以下2行は by ac_rfl でいける
+  _ = m * m + 2 * (m * n) + n * n := by rfl
+  _ = m * m + 2 * m * n + n * n := by rw[MyNat.mul_assoc]
