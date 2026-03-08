@@ -130,3 +130,9 @@ example (m n : MyNat) : (m + n) * (m + n) = m * m + 2 * m * n + n * n := by
   -- 以下2行は by ac_rfl でいける
   _ = m * m + 2 * (m * n) + n * n := by rfl
   _ = m * m + 2 * m * n + n * n := by rw[MyNat.mul_assoc]
+
+-- 右辺の 2 を先に 1+1 に展開するのがコツだった
+example (m n : MyNat) : (m + n) * (m + n) = m * m + 2 * m * n + n * n := by
+  rw [show 2 = 1 + 1 from rfl] -- 直前の calc では後半の 1+1 部分を 右辺に対して先に適用する
+  simp[MyNat.add_mul, MyNat.mul_add] -- 分配法則で一気に展開
+  ac_rfl -- 交換法則・結合法則 を使うと一致する
