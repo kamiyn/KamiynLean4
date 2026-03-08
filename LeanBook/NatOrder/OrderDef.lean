@@ -116,4 +116,16 @@ theorem MyNat.le_iff_add : n ≤ m ↔ ∃ k, n + k = m := by
 
 -- 練習問題
 example : 1 ≤ 4 := by
-  sorry
+  rw [MyNat.le_iff_add] -- ⊢ ∃ k, 1 + k = 4 に変換
+  exists 3
+
+example : 1 ≤ 4 := by
+  apply MyNat.le_step
+  apply MyNat.le_step
+  apply MyNat.le_step
+  rfl
+
+-- repeat + first 構文が存在する。LISP の末尾再帰のように 実行したい というプロンプトから
+example : 1 ≤ 4 := by
+  -- 1 ≤ 1 に到達するまで le_step を繰り返し適用する
+  repeat (first | rfl | apply MyNat.le_step)
