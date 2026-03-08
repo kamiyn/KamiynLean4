@@ -136,4 +136,5 @@ theorem MyNat.add_eq_zero_of_eq_zero : m = 0 ∧ n = 0 → m + n = 0 := by
 
 -- 練習問題
 example (n m : MyNat) : n + (1 + m) = n + 2 → m = 1 := by
-  sorry
+  expand_num -- 2 を展開
+  simp_all
