@@ -44,12 +44,12 @@ theorem MyNat.add_left_cancel (h : l + m = l + n) : m = n := by
   rw [MyNat.add_comm l m, MyNat.add_comm l n] at h
   apply MyNat.add_right_cancel h
 
-section
-  -- ここだけの simp 補題として登録する
-  attribute [local simp] MyNat.add_left_cancel
-  example : l + m = l + n → m = n := by
-    simp -- 登録したはずだが simp に無視されている
-end -- section
+-- section
+--   -- ここだけの simp 補題として登録する
+--   attribute [local simp] MyNat.add_left_cancel
+--   example : l + m = l + n → m = n := by
+--     simp -- 登録したはずだが simp に無視されている
+-- end -- section
 
 -- 命題をより簡単な命題に置き換えさせたい時は 同値性 ↔ を使って定理を述べる
 -- simp は既定では部分式から順に単純化する。simp ↓ は部分式よりも先に単純化を試みる
@@ -77,7 +77,8 @@ example : l + m = l + n → m = n := by
     have : m + n = m + 0 := by
       rw [h]
       simp
-    simp_all
+    -- ここで ↓ の効果が必要
+    simp_all only [add_zero, ↓add_left_cancel_iff] -- simp_all
   · -- 右から左 n = 0 → m + n = m
     simp_all
 
