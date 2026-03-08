@@ -137,4 +137,10 @@ example (m n : MyNat) : m * n + n * n = (m + n) * n := by
 
 -- 練習問題
 example (n : MyNat) : ∃ s t : MyNat, s * t = n * n + 8 * n + 16 := by
-  sorry
+  -- (n + 4)^2 なので s=t=n+4 にすれば成功する
+  exists (n + 4), (n + 4)
+  distrib
+
+example (n : MyNat) : ∃ s t : MyNat, s * t = n * n + 8 * n + 16 := by
+  exists 1, n * n + 8 * n + 16
+  distrib
