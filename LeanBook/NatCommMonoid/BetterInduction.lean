@@ -69,3 +69,51 @@ example (n : MyNat) : MyNat.pred (MyNat.pred n + 1) = MyNat.pred n := by
   cases n
   case zero => rfl -- 0 のケースも計算で解ける
   case succ n' => rfl -- succ のケースも計算で解ける
+
+-- https://github.com/LambdaNote/errata-leanbook-1-1/issues/80
+-- 実は rfl だけで解ける
+example (n : MyNat) : MyNat.pred (MyNat.pred n + 1) = MyNat.pred n := by
+  rfl
+
+-- 差し替え予定の練習問題
+/-- 再帰的に定義された、入力された自然数を2倍にする関数 -/
+private def MyNat.double (n : MyNat) : MyNat :=
+  match n with
+  | 0 => 0
+  | n + 1 => (MyNat.double n) + 2
+
+example (n : MyNat) : n.double.double = n + n + n + n := by
+  induction n
+  case zero => rfl
+  case succ n ih => calc
+    -- ⊢ MyNat.double (MyNat.double (n + 1))
+    --   = n + 1 + (n + 1) + (n + 1) + (n + 1)
+    -- 以下の rfl の連鎖は 最後の1回だけあれば そこまでは自動的に簡約してくれる
+    _ = MyNat.double (MyNat.double (n + 1)) := by rfl
+    _ = MyNat.double (MyNat.double (n) + 2) := by rfl
+    _ = MyNat.double (MyNat.double (n) + 1 + 1) := by rfl
+    _ = MyNat.double (MyNat.double (n) + 1) + 2 := by rfl
+    _ = MyNat.double (MyNat.double (n)) + 2 + 2 := by rfl
+    _ = n + n + n + n + 2 + 2 := by rw[ih]
+    _ = (n + 1) + (n + 1) + (n + 1) + (n + 1) := by ac_rfl
+
+-- 以下はうまくいかず。組み込みの Nat を使う環境であればいけるのかもしれない
+-- これがうまくいかないからこそ rfl 一発で済まないような練習問題にしたとも想像されうる
+-- example (n : MyNat) : n.double.double = n + n + n + n := by
+--   induction n
+--   case zero => rfl
+--   case succ n ih =>
+--     dsimp [MyNat.double]
+--     rw [ih]
+--     ac_rfl
+
+-- Gemini の支援を得て calc の流れを calc なしにするように変形
+-- InfoView 見ながら作業する分にはこちらの方がやりやすい
+example (n : MyNat) : n.double.double = n + n + n + n := by
+  induction n
+  case zero => rfl
+  case succ n ih =>
+    -- change により ⊢ を変更する。calc では by rfl に相当
+    change MyNat.double (MyNat.double n) + 2 + 2 = _
+    rw [ih]
+    ac_rfl
