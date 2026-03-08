@@ -106,8 +106,8 @@ macro "distrib" : tactic => `(tactic| focus
 example (m n : MyNat) : (m + 4) * n + n = m * n + 5 * n := by
   distrib
 
-example (m n : MyNat) : m * n + n * n = (m + n) * n := by
-  distrib -- simp made no progress エラー
+-- example (m n : MyNat) : m * n + n * n = (m + n) * n := by
+--   distrib -- simp made no progress エラー
 
 macro "expand_num" : tactic => `(tactic| focus
   -- try を付け加えて 進捗がなくてもエラーにしない
