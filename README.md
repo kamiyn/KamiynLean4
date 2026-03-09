@@ -4,3 +4,5 @@
 https://www.lambdanote.com/collections/lean/products/leanbook
 
 手習いの記録
+
+このリポジトリには コードしかないので学習のためには本を買いましょう
