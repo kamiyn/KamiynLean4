@@ -163,8 +163,39 @@ theorem MyNat.le_total (a b : MyNat) : a ≤ b ∨ b ≤ a := by
   cases (MyNat.lt_or_ge a b) <;> simp_all [MyNat.le_of_lt]
 
 -- 練習問題
-example (a : MyNat) : a = a + 1 := by
-  sorry
+example (a : MyNat) : a ≠ a + 1 := by
+  induction a
+  case zero => simp_all
+  case succ a ih => simp_all
 
-example (n : MyNat) : ¬ no + 1 ≤ n := by
-  sorry
+-- 以下悩みの記録 induction を使おうとしたのが間違い
+-- example (n : MyNat) : ¬ n + 1 ≤ n := by
+--   induction n
+--   case zero => simp_all
+--   case succ n ih =>
+--     intro h
+    -- rw [MyNat.le_iff_add] at * -- h も goal も和の等式に書き換える
+    -- obtain ⟨k, hk⟩ := h
+    -- have hyp2 : n + 1 + k + 1 = n + 1 := calc
+    --   _ = n + 1 + 1 + k := by ac_rfl
+    --   _ = n + 1 := by rw[hk]
+
+    -- have hyp : n + 1 + k = n := by
+    --   rw [MyNat.add_right_cancel_iff] at hyp2
+
+    -- have hyp : n + 1 + k = n := by
+    --   rw [MyNat.add_right_eq_self] at hyp2
+    --   ac_rfl
+    -- have : (∃ k, n + 1 + k = n) := by
+    --   exists k
+
+example (n : MyNat) : ¬ n + 1 ≤ n := by
+  intro h -- 初手 intro にすれば ¬ が 消えて ⊢ False になる
+  rw [MyNat.le_iff_add] at h -- h を和の等式に書き換える
+  obtain ⟨k, hk⟩ := h
+  -- hk : n + 1 + k = n
+  -- ⊢ False
+  have : n + (1 + k) = n := calc
+    _ = n + 1 + k := by ac_rfl
+    _ = n := by rw [hk]
+  simp_all
