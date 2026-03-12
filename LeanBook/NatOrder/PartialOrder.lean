@@ -105,4 +105,9 @@ example (h₁ : n ≤ m) (h₂ : m ≤ n) : n = m := by
 
 -- 練習問題
 example (a b : MyNat) : a < b ∨ a = b → a ≤ b := by
-  sorry
+  intro h
+  cases h
+  case inl hlt => -- a < b
+    exact MyNat.le_of_lt hlt
+  case inr heq => -- a = b
+    rw [heq]
