@@ -161,5 +161,11 @@ end -- section
 variable (m₁ m₂ n₁ n₂ l₁ l₂ : MyNat)
 
 example (h1 : m₁ ≤ m₂) (h2 : n₁ ≤ n₂) (h3 : l₁ ≤ l₂)
-  : l₁ + m₁ + n₁ ≤ l₂ + m₂ + m₂ := calc
-  sorry
+  : l₁ + m₁ + n₁ ≤ l₂ + n₂ + m₂ := calc
+  _ = l₁ + m₁ + n₁ := by rfl
+  -- 右から (nから) 順番に適用していく
+  -- 次の行について 本の解答は compatible だった
+  _ ≤ l₁ + m₁ + n₂ := by simp_all -- Try this: simp_all only [MyNat.add_le_add_iff_left]
+  _ ≤ l₁ + m₂ + n₂ := by simp_all -- try this: simp_all only [MyNat.add_le_add_iff_right,MyNat.add_le_add_iff_left]
+  _ ≤ l₂ + m₂ + n₂ := by simp_all -- Try this: simp_all only [MyNat.add_le_add_iff_right]
+  _ = l₂ + n₂ + m₂ := by ac_rfl -- 右辺に合わせて 交換法則
