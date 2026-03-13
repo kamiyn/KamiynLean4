@@ -45,7 +45,7 @@ example (m n : MyNat)
 
 example (m n : MyNat) : m * (n + 1) + (2 + m) * m = m * n + 3 * m + m * m := by
   simp only [MyNat.mul_add, MyNat.add_mul]
-  simp only [MyNat.mul_zero, MyNat.zero_mul, MyNat.mul_one, MyNat.one_mul]
+  simp only [MyNat.mul_one]
   fail_if_success ac_rfl -- ac_rfl が通らない
   guard_target =ₛ m * n + m + (2 * m + m * m) = m * n + 3 * m + m * m
   sorry
@@ -55,14 +55,13 @@ example (m n : MyNat) : m * (n + 1) + (2 + m) * m = m * n + (3 * m) + (m * m) :=
   rw [show 3 = 1 + 1 + 1 from rfl]
   rw [show 2 = 1 + 1 from rfl]
   simp only [MyNat.mul_add, MyNat.add_mul]
-  simp only [MyNat.mul_zero, MyNat.zero_mul, MyNat.mul_one, MyNat.one_mul]
   ac_rfl
 
 macro "distrib" : tactic => `(tactic| focus
   rw [show 3 = 1 + 1 + 1 from rfl]
   rw [show 2 = 1 + 1 from rfl]
   simp only [MyNat.mul_add, MyNat.add_mul]
-  simp only [MyNat.mul_zero, MyNat.zero_mul, MyNat.mul_one, MyNat.one_mul]
+  simp only [MyNat.mul_zero, MyNat.mul_one, MyNat.one_mul]
   ac_rfl
 )
 
