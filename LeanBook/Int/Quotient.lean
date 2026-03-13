@@ -115,6 +115,7 @@ private def Setoid.comp {α β : Type} (f : α → β) (sr : Setoid β)
       -- ⊢ f x ≈ f z
       exact Setoid.trans hxy hyz
 
+-- 本よりもさらに短く
 private def Setoid.comp2 {α β : Type} (f : α → β) (sr : Setoid β)
     : Setoid α where
   r := Rel.comap f (· ≈ ·)
@@ -122,10 +123,9 @@ private def Setoid.comp2 {α β : Type} (f : α → β) (sr : Setoid β)
     constructor <;> dsimp [Rel.comap] -- 共通で dsimp を適用
     case refl =>
       intro x
-      apply Setoid.refl -- apply で書くと (f x) を書かなくても完了する
+      apply Setoid.refl -- apply で書くと ⊢ f x ≈ f x から逆算して自動的に (f x) にパターンマッチするため完了する
+      -- exact Setoid.refl (f x) -- exact で書くなら (f x)
     case symm =>
-      intro x y
-      exact Setoid.symm
+      exact Setoid.symm -- exact だと intro + apply より短く解決する
     case trans =>
-      intro x y z
-      exact Setoid.trans
+      exact Setoid.trans -- exact だと intro + apply より短く解決する
