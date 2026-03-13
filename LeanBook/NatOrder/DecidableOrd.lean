@@ -149,4 +149,9 @@ example : 1 < 4 := by decide
 
 -- 練習問題
 example : 23 < 32 ∧ 12 ≤ 24 := by
-  sorry
+  constructor
+  · decide
+  · decide
+
+example : 23 < 32 ∧ 12 ≤ 24 := by
+  constructor <;> decide
