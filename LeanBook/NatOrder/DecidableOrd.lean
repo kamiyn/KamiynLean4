@@ -87,7 +87,7 @@ def MyNat.ble.inductAux (motive : MyNat → MyNat → Prop)
 --   | case3 m n ih =>
 --     sorry
 
--- 本にあった dsimp [MyNat.ble] は効果が無いようだった。
+-- 本にあった dsimp [MyNat.ble] は効果が無いようだったためコメントアウト
 -- simp と違って dsimp は効果がなくても警告にならない
 theorem MyNat.le_impl (m n : MyNat) : MyNat.ble m n = true ↔ m ≤ n := by
   induction m, n using MyNat.ble.inductAux with
@@ -99,7 +99,7 @@ theorem MyNat.le_impl (m n : MyNat) : MyNat.ble m n = true ↔ m ≤ n := by
     -- Try this: simp_all only [le_zero, add_eq_zero_iff_eq_zero, one_neq_zero,
     --   and_false, not_false_eq_true, ble_zero_right, Bool.false_eq_true]
     intro h -- h : n + 1 ≤ 0
-    contradiction
+    contradiction -- h が矛盾
   | case3 m n ih =>
     -- ih : m.ble n = true ↔ m ≤ n
     -- ⊢ (m + 1).ble (n + 1) = true ↔ m + 1 ≤ n + 1
@@ -148,10 +148,12 @@ instance : DecidableLT MyNat := fun n m =>
 example : 1 < 4 := by decide
 
 -- 練習問題
+-- 解答がないのは 生成プログラム上の不具合らしい https://github.com/LambdaNote/errata-leanbook-1-1/issues/129
 example : 23 < 32 ∧ 12 ≤ 24 := by
   constructor
   · decide
   · decide
 
+-- <;> を利用して1行化。上記 suffices ¬ n + 1 ≤ 0 from by simp_all を使わない でも使った
 example : 23 < 32 ∧ 12 ≤ 24 := by
   constructor <;> decide

@@ -48,6 +48,7 @@ example : (α : Type) × α := ⟨Prop, True⟩
 example : List ((α : Type) × α) := [⟨Nat, 1⟩, ⟨Bool, true⟩, ⟨Prop, True⟩]
 
 -- 練習問題
+-- 解答がないのは 生成プログラム上の不具合らしい https://github.com/LambdaNote/errata-leanbook-1-1/issues/59
 example : List ((α : Type) × α) := [⟨Nat, 42⟩, ⟨Bool, false⟩]
 
 -- intro を使った解法
@@ -61,7 +62,10 @@ example : {α : Type} → {n : Nat} → (a : α) → (v : Vect α n) → Vect α
   --    第1引数に要素、第2引数に既存のベクトルを取ることで、型レベルの長さが自動的に n + 1 に更新される。
   exact Vect.cons ha vectAlphaN
 
-example : {α : Type} → {n : Nat} → (a : α) → (v : Vect α n) → Vect α (n + 1) := fun a v => Vect.cons a v
+-- fun a v を使えば1行
+example : {α : Type} → {n : Nat} → (a : α) → (v : Vect α n) → Vect α (n + 1) :=
+  fun a v => Vect.cons a v
 
 -- 型を明示的に記述する
-example : {α : Type} → {n : Nat} → (a : α) → (v : Vect α n) → Vect α (n + 1) := fun {α : Type} {n : Nat} (a : α) (v : Vect α n) => Vect.cons a v
+example : {α : Type} → {n : Nat} → (a : α) → (v : Vect α n) → Vect α (n + 1) :=
+  fun {α : Type} {n : Nat} (a : α) (v : Vect α n) => Vect.cons a v
