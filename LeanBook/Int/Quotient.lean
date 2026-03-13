@@ -81,5 +81,51 @@ private def Rel.comap {α β : Type} (f : α → β) (r : β → β → Prop)
 private def Setoid.comp {α β : Type} (f : α → β) (sr : Setoid β)
     : Setoid α where
   r := Rel.comap f (· ≈ ·)
+  iseqv := by -- ⊢ Equivalence (Rel.comap f fun x1 x2 => x1 ≈ x2)
+    constructor
+    case refl =>
+      intro x -- Rel.comap f (fun x1 x2 => x1 ≈ x2) x x
+      -- dsimp [Rel.comap] refl に関しては 実施しなくていい
+      exact Setoid.refl (f x)
+      -- 当初以下のように書いたが Setoid.refl に引数を渡すことで解決できることがわかった
+      -- 定義に立ち戻れ、という教訓を示しているように思える
+
+      -- dsimp [Rel.comap] -- ⊢ f x ≈ f x
+      -- have : ∃ y : β, f x = y := by
+      --   simp
+      -- obtain ⟨k, hk⟩ := this
+      -- rw [hk]
+      -- exact Setoid.refl k
+    case symm =>
+      intro x y h -- Rel.comap f (fun x1 x2 => x1 ≈ x2) x y → Rel.comap f (fun x1 x2 => x1 ≈ x2) y x
+      -- h : Rel.comap f (fun x1 x2 => x1 ≈ x2) x y
+      -- ⊢ Rel.comap f (fun x1 x2 => x1 ≈ x2) y x
+      dsimp [Rel.comap] at *
+      -- h : f x ≈ f y
+      -- ⊢ f x ≈ f y
+      exact Setoid.symm h
+    case trans =>
+      intro x y z hxy hyz
+      -- hxy : Rel.comap f (fun x1 x2 => x1 ≈ x2) x y
+      -- hyz : Rel.comap f (fun x1 x2 => x1 ≈ x2) y z
+      -- ⊢ Rel.comap f (fun x1 x2 => x1 ≈ x2) x z
+      dsimp [Rel.comap] at *
+      -- hxy : f x ≈ f y
+      -- hyz : f y ≈ f z
+      -- ⊢ f x ≈ f z
+      exact Setoid.trans hxy hyz
+
+private def Setoid.comp2 {α β : Type} (f : α → β) (sr : Setoid β)
+    : Setoid α where
+  r := Rel.comap f (· ≈ ·)
   iseqv := by
-    sorry
+    constructor <;> dsimp [Rel.comap] -- 共通で dsimp を適用
+    case refl =>
+      intro x
+      apply Setoid.refl -- apply で書くと (f x) を書かなくても完了する
+    case symm =>
+      intro x y
+      exact Setoid.symm
+    case trans =>
+      intro x y z
+      exact Setoid.trans
