@@ -74,4 +74,13 @@ example {α : Type} (sr : Setoid α) (x y : α) : sr.r x y = (x ≈ y) := by
 
 -- 練習問題
 example {α : Type} : Equivalence (fun _x _y : α => true) := by
-  sorry
+  constructor
+  case refl => -- ⊢ ∀ (x : α), true = true
+    intro x -- ⊢ true = true
+    rfl -- 本だと trivial
+  case symm => -- ⊢ ∀ {x y : α}, true = true → true = true
+    intro x y h -- ⊢ true = true
+    rfl
+  case trans =>
+    intro x y z hxy hyz -- ⊢ true = true
+    rfl
