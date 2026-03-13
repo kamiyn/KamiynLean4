@@ -103,10 +103,45 @@ theorem MyInt.neg_def (x y : MyNat) : - ⟦(x, y)⟧ = (⟦(y, x)⟧ : MyInt) :=
 -- 練習問題
 -- r は α 上の二項関係とする
 variable {α : Type} {r : α → α → Prop}
-private theorem Ex.symm (refl : ∀ x, r × x) (h : ∀ x y z, r x y → r y z → r z y)
+
+private theorem Ex.symm (refl : ∀ x, r x x) (h : ∀ x y z, r x y → r y z → r z x)
   : ∀ {x y : α}, r x y → r y x := by
-  sorry
+  intro x y
+  have hrxx : r x x := by
+    exact refl x
+  have : r x x → r x y → r y x := by
+    exact h x x y
+  exact this hrxx
 
 private theorem Ex.equiv (refl : ∀ x, r x x)
     (h : ∀ x y z, r x y → r y z → r z x) : Equivalence r := by
-  sorry
+  constructor
+  case refl =>
+    intro x -- ⊢ r x x
+    have hrxx : r x x := by
+      exact refl x
+    assumption
+  case symm => -- ⊢ ∀ {x y : α}, r x y → r y x
+    exact Ex.symm refl h
+  case trans =>
+    intro x y z hxy hyz -- ⊢ r x z
+    have : r z x := by
+      exact h x y z hxy hyz
+    exact Ex.symm refl h this
+-- ここまで自力解答
+
+private theorem Ex.symm2 (refl : ∀ x, r x x) (h : ∀ x y z, r x y → r y z → r z x)
+  : ∀ {x y : α}, r x y → r y x := by
+  intro x y hxy
+  have := h x x y -- := by exact だったら have の後ろに直接関数適用が書ける。早く知りたかった
+  exact this (refl x) hxy
+
+private theorem Ex.equiv2 (refl : ∀ x, r x x)
+    (h : ∀ x y z, r x y → r y z → r z x) : Equivalence r := by
+  constructor
+  case refl => exact refl -- 何もいらなかった
+  case symm => exact Ex.symm refl h -- 本では Ex.symm を展開していた
+  case trans =>
+    intro x y z hxy hyz
+    have := h x y z hxy hyz
+    exact Ex.symm refl h this
