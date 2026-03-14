@@ -53,7 +53,7 @@ theorem MyInt.add_zero (m : MyInt) : m + 0 = m := by
   -- a : PreInt が与えられたとし、 a = (a₁, a₂) と表されたとする
   intro (a₁, a₂)
   -- このとき同値関係の定義から a₁ + 0 + a₂ = a₂ + 0 + a₁ を示せばよい
-  apply Quot.sound
+  apply Quotient.sound
   notation_simp -- Try this: simp only [PreInt.sr, MyNat.ofNat_zero, PreInt.r]
   ac_rfl
 
@@ -62,7 +62,7 @@ theorem MyInt.zero_add (m : MyInt) : 0 + m = m := by
   refine Quotient.inductionOn m ?_
   -- ⊢ ∀ (a : PreInt), 0 + ⟦a⟧ = ⟦a⟧
   intro (a₁, a₂)
-  apply Quot.sound
+  apply Quotient.sound
   notation_simp
   -- ⊢ 0 + a₁ + a₂ = 0 + a₂ + a₁
   ac_rfl
@@ -75,7 +75,7 @@ section
   local macro "unfold_int₁" : tactic => `(tactic| focus
     refine Quotient.inductionOn m ?_
     intro (a₁, a₂)
-    apply Quot.sound
+    apply Quotient.sound
     notation_simp
     -- ac_rfl
   )
@@ -92,7 +92,7 @@ section
   local macro "unfold_int₁" : tactic => `(tactic| focus
     refine Quotient.inductionOn m ?_
     intro (a₁, a₂)
-    apply Quot.sound
+    apply Quotient.sound
     notation_simp
     -- ac_rfl
   )
@@ -111,7 +111,7 @@ macro "unfold_int₁" : tactic => `(tactic| focus
   intro m -- intro で m を導入する (呼び出し側に revert m を記述する)
   refine Quotient.inductionOn m ?_
   intro (a₁, a₂)
-  apply Quot.sound
+  apply Quotient.sound
   notation_simp
 )
 
@@ -130,7 +130,7 @@ macro "unfold_int₂" : tactic => `(tactic| focus
   intro m n
   refine Quotient.inductionOn₂ m n ?_
   intro (a₁, a₂) (b₁, b₂)
-  apply Quot.sound
+  apply Quotient.sound
   notation_simp
 )
 
@@ -139,7 +139,7 @@ macro "unfold_int₃" : tactic => `(tactic| focus
   intro m n k
   refine Quotient.inductionOn₃ m n k ?_
   intro (a₁, a₂) (b₁, b₂) (c₁, c₂)
-  apply Quot.sound
+  apply Quotient.sound
   notation_simp
 )
 
