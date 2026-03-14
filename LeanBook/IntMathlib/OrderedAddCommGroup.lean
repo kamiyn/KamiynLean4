@@ -1,8 +1,9 @@
 import LeanBook.IntMathlib.PartialOrder
 
 -- 順序群があったとして整合的であるとは
--- ∀ x,y,z ∈ X, x ≤ y → x ⋄ z ≤ y ⋄ z -- 後ろから z を適用
--- ∀ x,y,z ∈ X, x ≤ y → z ⋄ x ≤ z ⋄ y -- 前から z を適用
+-- ∀ x,y,z ∈ X, x ≤ y → x ⋄ z ≤ y ⋄ z -- 右から z を適用
+-- ∀ x,y,z ∈ X, x ≤ y → z ⋄ x ≤ z ⋄ y -- 左から z を適用
+-- このファイルでは 左からの加法 のみを扱っている
 
 theorem MyInt.add_le_add_left (a b : MyInt) (h : a ≤ b) (c : MyInt)
     : c + a ≤ c + b := by
