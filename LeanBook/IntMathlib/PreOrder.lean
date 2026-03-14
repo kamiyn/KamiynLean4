@@ -1,6 +1,6 @@
 import LeanBook.IntMathlib.Mul
 
--- 二項関係 (· ≤ ·) が以下のを満たす時 前順序 (preorder) である、と言う
+-- 二項関係 (· ≤ ·) が以下の条件を満たす時、前順序 (preorder) である、と言う
 --   反射律 ∀ x ∈ X, x ≤ x
 --   推移律 ∀ x,y,z ∈ X, x ≤ y ∧ y ≤ z ⇒ x ≤ z
 
