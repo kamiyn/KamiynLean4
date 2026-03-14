@@ -68,8 +68,29 @@ theorem MyInt.le_iff_eq_or_lt (m n : MyInt) : n ≤ m ↔ n = m ∨ n < m := by
   case mpr => apply MyInt.le_of_eq_or_lt
 
 -- 練習問題
+-- https://github.com/LambdaNote/errata-leanbook-1-1/issues/207
+-- 1問めの解答が207ページにない
 example {a b : MyInt} (h : b < a) : ¬ a ≤ b := by
-  sorry
+  have : b ≤ a ∧ ¬ (a ≤ b) := by
+    dsimp [(· < ·), MyInt.lt] at h
+    exact h
+  exact this.right
 
 example {a : MyInt} (neg : a ≤ 0) : 0 ≤ -a := by
-  sorry
+  have : 0 + a ≤ -a + a := calc
+    _ = a := by abel
+    _ ≤ 0 := by simp_all
+    _ = -a + a := by abel
+  simp_all
+
+example {a : MyInt} (neg : a ≤ 0) : 0 ≤ -a := by
+  notation_simp at *
+  -- neg : ∃ k, a + ↑k = 0
+  -- ⊢ ∃ k, 0 + ↑k = -a
+  obtain ⟨k, hk⟩ := neg
+  have : ↑k = -a := calc
+    _ = (a + ↑k) - a := by abel
+    _ = 0 - a := by rw [hk]
+    _ = - a := by simp
+  exists k
+  simp_all
