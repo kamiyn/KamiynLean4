@@ -137,5 +137,12 @@ example (a b c : MyInt) (h1 : a ≤ b) (h2 : b ≤ c) : a ≤ c := by
   order
 
 -- 練習問題
+-- h2 を変形して goal を得る
 example (a b : MyInt) (h1 : a ≤ b) (h2 : ¬ (a < b)) : b ≤ a := by
-  sorry
+  rw [MyInt.lt_def] at h2
+  simp [h1] at h2
+  assumption
+
+-- order で解決だった
+example (a b : MyInt) (h1 : a ≤ b) (h2 : ¬ (a < b)) : b ≤ a := by
+  order
