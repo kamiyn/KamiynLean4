@@ -51,4 +51,15 @@ example (a b : MyInt) (h1 : a ≤ b) (h2 : b ≤ a) : a = b := by
 
 -- 練習問題
 example (a b : MyInt) (h : a = b ∨ a < b) : a ≤ b := by
-  order
+  cases h
+  case inl hl => -- hl : a = b
+    order
+    -- https://github.com/LambdaNote/errata-leanbook-1-1/issues/168
+    -- 本では rw [hl] 相当の書き方だった
+    -- 次の example のように1行化する方が PartialOrder っぽさが表現されているように思える
+  case inr hr => -- hr : a < b
+    order
+
+-- ということは
+example (a b : MyInt) (h : a = b ∨ a < b) : a ≤ b := by
+  cases h <;> order
