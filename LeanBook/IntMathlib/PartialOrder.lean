@@ -2,7 +2,7 @@ import LeanBook.IntMathlib.PreOrder
 
 -- 半順序 (partial order) であるとは
 --   X は ≤ に関して前順序集合である
---   ≤ は反対称性を満たす : ∀ x,y ∈ X, x ≤ y ∧ ¥ ≤ x ⇒ x = y
+--   ≤ は反対称性を満たす : ∀ x,y ∈ X, x ≤ y ∧ y ≤ x ⇒ x = y
 
 @[simp ↓]
 theorem MyInt.add_right_eq_self {a b : MyInt} : a + b = a ↔ b = 0 := by
