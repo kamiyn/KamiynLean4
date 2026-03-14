@@ -53,6 +53,8 @@ theorem MyInt.add_zero (m : MyInt) : m + 0 = m := by
   -- a : PreInt が与えられたとし、 a = (a₁, a₂) と表されたとする
   intro (a₁, a₂)
   -- このとき同値関係の定義から a₁ + 0 + a₂ = a₂ + 0 + a₁ を示せばよい
+  -- https://github.com/LambdaNote/errata-leanbook-1-1/issues/151
+  -- 本では Quot.sound になっている。証明としては成り立っているが 技術的負債ではないか? との Gemini 見解
   apply Quotient.sound
   notation_simp -- Try this: simp only [PreInt.sr, MyNat.ofNat_zero, PreInt.r]
   ac_rfl
