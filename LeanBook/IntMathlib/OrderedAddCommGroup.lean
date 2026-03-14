@@ -5,7 +5,9 @@ import LeanBook.IntMathlib.PartialOrder
 -- ∀ x,y,z ∈ X, x ≤ y → z ⋄ x ≤ z ⋄ y -- 左から z を適用
 -- このファイルでは 左からの加法 のみを扱っている
 
+-- GitHub Copilot 指摘事項
 -- ファイル名/章タイトルが「OrderedAddCommGroup（順序群）」ですが、ここで登録しているのは IsOrderedAddMonoid MyInt（モノイドの順序整合性）だけ
+-- 本の分量 との兼ね合いで削られた可能性がある
 
 theorem MyInt.add_le_add_left (a b : MyInt) (h : a ≤ b) (c : MyInt)
     : c + a ≤ c + b := by
