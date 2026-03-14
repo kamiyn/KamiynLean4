@@ -175,13 +175,14 @@ theorem MyInt.neg_add_cancel (m : MyInt) : -m + m = 0 := by
   unfold_int₁
   ac_rfl
 
--- abel タクティクで再利用可能にする
 -- アーベル群 (可換群 commutative group) を表す AddCommGroup という型クラスのインスタンスにする
 -- アーベル群であるとは
 --  単位元 と 結合法則がある (モノイド である)
 --  逆元がある (群 である)
 --  交換法則を満たす (可換 である)
 
+-- AddCommGroup は abel タクティクで再利用可能にするために
+-- Mathlib により提供される型クラス
 instance : AddCommGroup MyInt where
   add_assoc := MyInt.add_assoc
   add_comm := MyInt.add_comm
