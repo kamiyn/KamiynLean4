@@ -1,4 +1,4 @@
-import LeanBook.IntMathLib.Add
+import LeanBook.IntMathlib.Add
 
 -- ここから自然数が半環であることを再利用可能にする
 
