@@ -9,17 +9,7 @@ https://www.lambdanote.com/collections/lean/products/leanbook
 
 # Mathlib の導入
 
-[Using mathlib4 as a dependency](https://github.com/leanprover-community/mathlib4/wiki/Using-mathlib4-as-a-dependency)
-
-ここでは lakefile.toml を使っていないため、lakefile.lean 方式で導入する。
-
-``` lean
--- master ブランチを参照する方法
-require "leanprover-community" / "mathlib"
-```
-
-バージョン固定 (git的にはタグで管理されているもの https://github.com/leanprover-community/mathlib4/releases/tag/v4.22.0) を参照
-ここではこちらを指定している。
+バージョン固定 (git的にはタグで管理されているもの https://github.com/leanprover-community/mathlib4/releases/tag/v4.22.0) を指定。
 
 ``` lean
 require mathlib from git
@@ -28,20 +18,43 @@ require mathlib from git
 
 ## ライブラリの取得
 
+``` sh
+lake update mathlib # lake-manifest.json の更新を含む
+lake exe cache get # Mathlib のビルド済みバイナリをダウンロード
+```
+
+## 公式ドキュメントとの違い
+
+[Using mathlib4 as a dependency](https://github.com/leanprover-community/mathlib4/wiki/Using-mathlib4-as-a-dependency)
+
+によれば lakefile.toml を使っていないため、lakefile.lean 方式で導入する。
+
+さらにバージョン固定されない以下の指定方法が公式ドキュメントにある。
+
+``` sh
+# Lean4 自体を更新する
+# mathlib の master ブランチを参照 するにあたって lean-toolchain を更新 (すなわち Lean4 本体のバージョン更新) が必要と思われる
+curl https://raw.githubusercontent.com/leanprover-community/mathlib4/master/lean-toolchain -o lean-toolchain
+```
+
+``` lean
+require "leanprover-community" / "mathlib"
+```
+
+lakefile.lean 編集後の操作について、
 [Using mathlib4 as a dependency#Getting started](https://github.com/leanprover-community/mathlib4/wiki/Using-mathlib4-as-a-dependency#getting-started) によれば
 
 ``` sh
 lake exe cache get
 ```
 
-である。
+だけが記述されているが、
+(lake update をせずに) 実際に実行すると以下のエラーとなり、
+lake-manifest.json の更新が必要であることがわかる。
 
-[Using mathlib4 as a dependency#Updating mathlib4](https://github.com/leanprover-community/mathlib4/wiki/Using-mathlib4-as-a-dependency#updating-mathlib4) には以下のように書かれている。
-
-``` sh
-curl https://raw.githubusercontent.com/leanprover-community/mathlib4/master/lean-toolchain -o lean-toolchain
-lake update
+```
+> lake exe cache get
+error: missing manifest; use `lake update` to generate one
 ```
 
-ここには curl による lean 自体のバージョンを更新する操作を含んでおり、
-main ブランチを参照する場合に lean 自体のバージョン更新が必要であると想像される。
+本では lake update mathlib を実行しているが、第8章開始時点で依存ライブラリが mathlib しかないため、lake update mathlib と lake update の違いはないと思われる。
