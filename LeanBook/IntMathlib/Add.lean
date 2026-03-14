@@ -55,6 +55,7 @@ theorem MyInt.add_zero (m : MyInt) : m + 0 = m := by
   -- このとき同値関係の定義から a₁ + 0 + a₂ = a₂ + 0 + a₁ を示せばよい
   -- https://github.com/LambdaNote/errata-leanbook-1-1/issues/151
   -- 本では Quot.sound になっている。証明としては成り立っているが 技術的負債ではないか? との Gemini 見解
+  -- 発見のトリガーは GitHub Copilot によるレビュー https://github.com/kamiyn/KamiynLean4/pull/1
   apply Quotient.sound
   notation_simp -- Try this: simp only [PreInt.sr, MyNat.ofNat_zero, PreInt.r]
   ac_rfl
