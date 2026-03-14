@@ -144,4 +144,9 @@ example : ¬ (3 : MyInt) = 4 := by decide
 -- 練習問題
 /-- 自然数の像は非負の整数である -/
 example (a : MyInt) (h : ∃ k : MyNat, a = ↑k) : 0 ≤ a := by
-  sorry
+  obtain ⟨k, hk⟩ := h
+  -- 和の等式に置き換える
+  notation_simp -- Try this: simp only [MyInt.le_def]
+  -- ⊢ ∃ k, 0 + ↑k = a
+  exists k
+  simp_all
