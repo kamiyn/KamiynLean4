@@ -23,17 +23,11 @@ theorem MyInt.nonneg_or_nonneg_neg {a : MyInt} : 0 ≤ a ∨ 0 ≤ -a := by
     | inl h => -- h : n ≤ m
       left
       simp [mk_def]
-      -- goal: 0 ≤ (m : MyInt) - (n : MyInt)
-      rw [MyInt.sub_nonneg]
-      -- goal: (n : MyInt) ≤ (m : MyInt)
-      exact (by exact_mod_cast h)
+      norm_cast
     | inr h => -- h : m ≤ n
       right
       simp [mk_def]
-      -- goal: 0 ≤ (n : MyInt) - (m : MyInt)
-      rw [MyInt.sub_nonneg]
-      -- goal: (m : MyInt) ≤ (n : MyInt)
-      exact (by exact_mod_cast h)
+      norm_cast
 
 /-- 整数は全順序 -/
 theorem MyInt.le_total (a b : MyInt) : a ≤ b ∨ b ≤ a := by
