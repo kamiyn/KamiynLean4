@@ -175,7 +175,9 @@ theorem MyInt.mul_lt_mul_of_pos_right (h : a < b) (pos : 0 < c)
 
 instance : IsStrictOrderedRing MyInt where
   zero_le_one := by decide
-  exists_pair_ne := by exists 0, 1
+  exists_pair_ne := by
+    exists (0 : MyInt), (1 : MyInt)
+    decide
   mul_lt_mul_of_pos_left := by apply MyInt.mul_lt_mul_of_pos_left
   mul_lt_mul_of_pos_right := by apply MyInt.mul_lt_mul_of_pos_right
 
