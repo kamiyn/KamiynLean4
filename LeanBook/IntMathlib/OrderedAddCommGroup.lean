@@ -9,6 +9,11 @@ import LeanBook.IntMathlib.PartialOrder
 -- ファイル名/章タイトルが「OrderedAddCommGroup（順序群）」ですが、ここで登録しているのは IsOrderedAddMonoid MyInt（モノイドの順序整合性）だけ
 -- 本の分量 との兼ね合いで削られた可能性がある
 
+-- さらに調査:
+-- 「整合的」の直前に 「アーベル群(または可換群)と呼ぶ」という記述があるので
+-- MyInt（整数環の加法群）のような可換群においては、左の整合性と右の整合性は論理的に同値
+-- であることを認めれば 左からの演算のみ整合的 を示すだけでよいことになる
+
 theorem MyInt.add_le_add_left (a b : MyInt) (h : a ≤ b) (c : MyInt)
     : c + a ≤ c + b := by
   notation_simp at *
