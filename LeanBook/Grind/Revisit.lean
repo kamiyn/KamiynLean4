@@ -115,3 +115,39 @@ theorem MyNat.mul_one (n : MyNat) : n * 1 = n := by
 @[simp, grind =]
 theorem MyNat.one_mul (n : MyNat) : 1 * n = n := by
   induction n with grind
+
+@[grind =]
+theorem MyNat.mul_comm (m n : MyNat) : m * n = n * m := by
+  induction n with grind
+
+@[grind _=_]
+theorem MyNat.add_mul (l m n : MyNat) : (l + m) * n = l * n + m * n := by
+  induction n with grind
+
+@[grind =]
+theorem MyNat.mul_add (l m n : MyNat) : l * (m + n) = l * m + l * n := by
+  grind
+
+@[grind _=_]
+theorem MyNat.mul_assoc (l m n : MyNat) : l * m * n = l * (m * n) := by
+  induction n with grind
+
+instance : Std.Associative (α := MyNat) (· * ·) where
+  assoc := MyNat.mul_assoc
+
+instance : Std.Commutative (α := MyNat) (· * ·) where
+  comm := MyNat.mul_comm
+
+-- grind 1行で終わらせるためには、補題を見つけ出す必要があるケースが存在するとのこと
+
+-- 練習問題
+variable {l m n : MyNat}
+
+/-- 右から足す演算 (· + m) は単射 -/
+@[grind →]
+theorem MyNat.add_right_cancel (h : l + m = n + m) : l = n := by
+  sorry
+
+@[grind →]
+theorem MyNat.add_left_cancel (h : l + m = l + n) : m = n := by
+  sorry
