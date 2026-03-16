@@ -140,14 +140,70 @@ instance : Std.Commutative (α := MyNat) (· * ·) where
 
 -- grind 1行で終わらせるためには、補題を見つけ出す必要があるケースが存在するとのこと
 
+-- @[grind =] は 左辺がパターンとして登録される
+--   無条件の同一視  E-graph 内で a と b を 最初から同じもの（同値類）として結合
+--   simp と異なり「書き換え」ではなく「同一視」として保持されるため、探索の柔軟性が高い
+-- @[grind →] は 定理の前提がパターンとして登録 (Forward Reasoning Rule)
+--   定理の**前提（Premises）がすべて揃ったことを検知した瞬間、その結論（Conclusion）**を新しい事実として E-graph に追加
+--   論理的な帰結を増やす
+--   → は事実を増やすだけなので比較的安全
+-- @[grind =>] は 左から右にパターンを探す (E-matching / Rewriting Rule)
+--   主に等式（Equality）や、項の構造に基づいた書き換え
+--   前提を満たすかどうかよりも、**「特定の形をした項が存在するか」**
+--   不用意に使うと項を無限に生成し続ける
+
 -- 練習問題
 variable {l m n : MyNat}
+
+-- LeanBook/NatOrder/AddCancel.lean にあった証明
+-- example (h : l + m = n + m) : l = n := by
+--   induction m
+--   case zero => simp_all
+--   case succ m ih =>
+--     -- ih : l + m = n + m → l = n
+--     -- h : l + (m + 1) = n + (m + 1)
+--     -- ⊢ l = n
+--     have lem : (l + m) + 1 = (n + m) + 1 := calc
+--       _ = l + (m + 1) := by ac_rfl -- 足し算の結合法則を適用
+--       _ = n + (m + 1) := by rw [h]
+--       _ = (n + m) + 1 := by ac_rfl
+--     have : l + m = n + m := by
+--       -- (h : m + 1 = n + 1) : m = n の性質を適用
+--       injection lem
+--     exact ih this
+
+-- 自力解答では
+-- 2つ目の have : l + m = n + m をそのまま補題として構成
+-- このとき case succ m ih => の下にある InfoView のコピー のうち、rw [h] で使っている
+--   h : l + (m + 1) = n + (m + 1) を仮定に置けばよい
+@[grind →]
+private theorem add_right_cancel_lem : l + (m + 1) = n + (m + 1) → l + m = n + m := by
+  intro h
+  have lem : (l + m) + 1 = (n + m) + 1 := calc
+    _ = l + (m + 1) := by ac_rfl -- 足し算の結合法則を適用
+    _ = n + (m + 1) := by rw [h]
+    _ = (n + m) + 1 := by ac_rfl
+  injection lem
 
 /-- 右から足す演算 (· + m) は単射 -/
 @[grind →]
 theorem MyNat.add_right_cancel (h : l + m = n + m) : l = n := by
-  sorry
+  induction m with grind
 
+-- MyNat.add_right_cancel があるのでいける
 @[grind →]
 theorem MyNat.add_left_cancel (h : l + m = l + n) : m = n := by
-  sorry
+  induction m with grind
+
+-- 本の解答
+-- 元の証明 における have lem , have の連鎖は
+-- (l + m) + 1 = (n + m) + 1 → (l + m) = (n + m)
+-- ここで (l + m) と (n + m) をそれぞれ変数とみられれば
+-- 右からの 1加算 をキャンセルしたかったのだった
+@[grind →]
+private theorem add_one_right_cancel (h : l + 1 = n + 1): l = n := by
+  injection h
+
+@[grind →]
+theorem MyNat.add_right_cancel2 (h : l + m = n + m) : l = n := by
+  induction m with grind
